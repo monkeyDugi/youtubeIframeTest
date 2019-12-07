@@ -132,8 +132,9 @@ songListSet();
 // 음악 목록 Set
 function songListSet() {
 	for(var i=0; i<songList.length; i++) {
-		$('.url').eq(i).val(songList[i].url);
-		$('.index').eq(i).val(i);
+		// data(key, value) : 변경된 html 요소는 보여지지 않는다.
+		$('url').eq(i).data('url', songList[i].url);
+		$('index').eq(i).data('index', i);
 		$('.video-item-title').eq(i).text(songList[i].title);
 		$('.video-item-img').eq(i).children().eq(0).attr('src', songList[i].img);
 		$('.video-item-artist').eq(i).text(songList[i].singer);
@@ -153,23 +154,23 @@ function lastSongChk() {
 // 재상완료 후 다음곡 or 1번 곡 idSet
 function endedVideoIdSet() {
 	if(lastSongChk()) {
-		return $('.url').eq(currentSongIndex).val();
+		return $('url').eq(currentSongIndex).dataset;
 	}
 
 	currentSongIndex = 0;
-	return $('.url').eq(0).val();
+	return $('url').eq(0).dataset;
 }
 
 // Album Click
-$('.video-item-img').click(function() {
+$('.video-item').click(function() {
 	onclickVideoIdSet($(this));
 });
 
 // onClick 시 VideoId, 현재노래 index Set
 function onclickVideoIdSet(obj) {
 	if(obj != null && obj != '') {
-		videoId = obj.parent().children().eq(1).val();          // url
-		currentSongIndex = obj.parent().children().eq(2).val();	// no
+		videoId = obj.children().children('url').data('url');
+		currentSongIndex = obj.children().children('index').data('index');
 	} else {
 		videoId = endedVideoIdSet();
 	}
