@@ -1,9 +1,9 @@
-var videoId;
-var tag;
-var nextSong;
-var preSong;
-var currentSongIndex;
-var songList = [
+let videoId;
+let tag;
+let nextSong;
+let preSong;
+let currentSongIndex;
+let songList = [
 	{
 		'url' : '0clr0fJhCRM'
 	,	'img' : 'https://i.ytimg.com/vi/0clr0fJhCRM/hqdefault.jpg?sqp=-oaymwEYCKgBEF5IVfKriqkDCwgBFQAAiEIYAXAB&rs=AOn4CLBgMnrRAHc3J1-R8dVwq-WTP6vJBg'
@@ -94,7 +94,7 @@ var songList = [
  */
 tag = document.createElement('script');
 tag.src = "https://www.youtube.com/iframe_api";
-var firstScriptTag = document.getElementsByTagName('script')[0];
+let firstScriptTag = document.getElementsByTagName('script')[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
 /**
@@ -102,7 +102,7 @@ firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
  * 플레이어 API에 대한 JavaScript 다운로드 완료 시 API가 이 함수 호출한다.
  * 페이지 로드 시 표시할 플레이어 개체를 만들어야 한다.
  */
-var player;
+let player;
 function onYouTubeIframeAPIReady() {
 	player = new YT.Player('player', {
 		height: '200',
@@ -131,20 +131,19 @@ songListSet();
 
 // 음악 목록 Set
 function songListSet() {
-	for(var i=0; i<songList.length; i++) {
-		// data(key, value) : 변경된 html 요소는 보여지지 않는다.
-		$('url').eq(i).data('url', songList[i].url);
-		$('index').eq(i).data('index', i);
-		$('.video-item-title').eq(i).text(songList[i].title);
-		$('.video-item-img').eq(i).children().eq(0).attr('src', songList[i].img);
-		$('.video-item-artist').eq(i).text(songList[i].singer);
+	for(let i=0; i<songList.length; i++) {
+		// dataset : 추가된 값은 html 요소에 보여지지 않는다.
+		document.getElementsByTagName('url')[i].dataset.url = songList[i].url;
+		document.getElementsByTagName('index')[i].dataset.index = i;
+		document.getElementsByClassName('video-item-title')[i].innerHTML = songList[i].title;
+		document.getElementsByClassName('video-item-img')[i].firstElementChild.src = songList[i].img;
+		document.getElementsByClassName('video-item-artist')[i].innerHTML = songList[i].singer;
 	}
 }
 
 // 마지막 곡인지 체크
 function lastSongChk() {
 	if(++currentSongIndex ==  songList.length) {
-		console.log('lastSongChk');
 		return false;
 	}
 
@@ -154,11 +153,11 @@ function lastSongChk() {
 // 재상완료 후 다음곡 or 1번 곡 idSet
 function endedVideoIdSet() {
 	if(lastSongChk()) {
-		return $('url').eq(currentSongIndex).dataset;
+		return document.getElementsByTagName('url')[currentSongIndex].dataset.url
 	}
 
 	currentSongIndex = 0;
-	return $('url').eq(0).dataset;
+	return document.getElementsByTagName('url')[0].dataset.url
 }
 
 // Album Click
